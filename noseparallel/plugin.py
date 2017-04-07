@@ -17,13 +17,15 @@ class ParallelPlugin(Plugin):
         self.node_index = int(os.environ.get('CIRCLE_NODE_INDEX') or os.environ.get('NODE_INDEX', 0))
 
     def wantMethod(self, method):
+        name = method.im_class.__name__ + '.' + method.__name__
         try:
-            return self._pick_by_name(method.__name__)
+            return self._pick_by_name(name)
         except AttributeError:
             return None
         return None
 
     def wantFunction(self, function):
+        print 'wantFunction', function
         try:
             return self._pick_by_name(function.__name__)
         except AttributeError:
